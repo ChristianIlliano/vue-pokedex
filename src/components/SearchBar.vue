@@ -13,12 +13,18 @@ export default {
 </script>
 
 <template>
-    <!-- SearchBar -->
-    <label for="">
-        <input type="text" v-model="store.searchQuery">
-    </label>
-    <button class="btn-search" @click="$emit('pokeSearch')">Cerca</button>
+    <div class="search-bar">
+        <!-- SearchBar -->
+        <label for="">
+            <input type="text" v-model="store.searchQuery">
+        </label>
+        <button class="btn-search" @click="$emit('pokeSearch')">Cerca</button>
+    </div>
 
 </template>
 
-<style></style>
+<style>
+.search-bar {
+    margin-top: 50px;
+}
+</style>

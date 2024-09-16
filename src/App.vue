@@ -56,12 +56,17 @@ export default {
 <style scoped>
 .pokedex {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pokedex-left {
   width: 400px;
   height: 60vh;
   background-color: red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pokedex-right {
