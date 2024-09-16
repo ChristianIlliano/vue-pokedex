@@ -2,42 +2,72 @@
 import axios from "axios";
 import { store } from './store';
 import SearchBar from './components/SearchBar.vue';
+import SpritePokemon from "./components/SpritePokemon.vue";
+
 export default {
   data() {
     return {
-    store,
-    }
+      store,
+      pokemonData: null,  // Inizializza pokemonData come null
+      error: null,  // Gestione di eventuali errori
+    };
   },
   components: {
     SearchBar,
-  },
-
-  created() {
-
+    SpritePokemon,
   },
 
   methods: {
     getPokemon() {
       const searchQuery = this.store.searchQuery;
-      axios.get(`https://pokeapi.co/api/v2/pokemon/${searchQuery}`, {
-        params: {
-          searchQuery: this.store.searchQuery,
-          
-        }
-    }).then((resp) => {
-      console.log(resp);
-      
-    })
-    } 
+      if (!searchQuery) return;  // Verifica che ci sia una query
+
+      axios.get(`https://pokeapi.co/api/v2/pokemon/${searchQuery}`)
+        .then((resp) => {
+          this.pokemonData = resp.data;  // Salva i dati del Pokémon
+          this.error = null;  // Resetta eventuali errori
+        })
+        .catch((error) => {
+          console.error(error);
+          this.error = "Il Pokémon cercato non è stato trovato.";  // Gestione dell'errore
+          this.pokemonData = null;  // Resetta i dati se c'è un errore
+        });
+    }
   }
 };
 </script>
 
 <template>
   <div class="pokedex">
-    <SearchBar @poke-search="getPokemon"/>
+    <div class="pokedex-left">
+      <!-- Barra di ricerca per il Pokémon -->
+      <SearchBar @poke-search="getPokemon"/>
+      
+      <!-- Mostra SpritePokemon passando i dati del Pokémon -->
+      <SpritePokemon :pokemonData="pokemonData"/>
 
+      <!-- Visualizza eventuali messaggi di errore -->
+      <div v-if="error" class="error-message">{{ error }}</div>
+    </div>
+    <div class="pokedex-right"></div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.pokedex {
+  display: flex;
+}
+
+.pokedex-left {
+  width: 400px;
+  height: 60vh;
+  background-color: red;
+}
+
+.pokedex-right {
+  width: 400px;
+  height: 60vh;
+  background-color: red;
+}
+
+</style>
